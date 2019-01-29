@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  resources :attending_members
+  resources :group_members
+  resources :events
+  resources :groups
   # RESTful routes
   resources :examples, except: %i[new edit]
 
