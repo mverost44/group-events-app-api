@@ -1,4 +1,4 @@
-class GroupsController < ApplicationController
+class GroupsController < OpenReadController
   before_action :set_group, only: [:show, :update, :destroy]
 
   # GET /groups
@@ -15,7 +15,7 @@ class GroupsController < ApplicationController
 
   # POST /groups
   def create
-    @group = Group.new(group_params)
+    @group = current_user.groups.new(group_params)
 
     if @group.save
       render json: @group, status: :created, location: @group
@@ -36,16 +36,19 @@ class GroupsController < ApplicationController
   # DELETE /groups/1
   def destroy
     @group.destroy
+
+    head :no_content
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_group
-      @group = Group.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def group_params
-      params.require(:group).permit(:name, :description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_group
+    @group = current_user.group.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def group_params
+    params.require(:group).permit(:name, :description)
+  end
 end
