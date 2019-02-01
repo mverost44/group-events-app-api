@@ -3,6 +3,9 @@
 class User < ApplicationRecord
   include Authentication
   has_many :examples
+  has_many :organized_groups,
+           class_name: 'Group',
+           inverse_of: 'organizer'
   has_many :group_members
   has_many :groups, through: :group_members
   has_many :attending_members

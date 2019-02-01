@@ -1,7 +1,7 @@
 class GroupSerializer < ActiveModel::Serializer
-  attributes :id, :name, :description, :events, :users, :editable
+  attributes :id, :organizer, :name, :description, :users, :editable
 
   def editable
-    scope == object.users
+    scope == object.organizer
   end
 end

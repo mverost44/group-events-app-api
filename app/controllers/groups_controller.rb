@@ -1,5 +1,5 @@
 class GroupsController < OpenReadController
-  before_action :set_group, only: [:show, :update, :destroy]
+  before_action :set_group, only: [:update, :destroy]
 
   # GET /groups
   def index
@@ -8,9 +8,10 @@ class GroupsController < OpenReadController
     render json: @groups
   end
 
-  # GET /groups/1
+  # GET All groups organized by a user
   def show
-    render json: @group
+    groups = Group.where("user_id = #{set_user_groups}")
+    render json: groups
   end
 
   # POST /groups
@@ -44,11 +45,15 @@ class GroupsController < OpenReadController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_group
-    @group = current_user.group.find(params[:id])
+    @group = current_user.organized_groups.find(params[:id])
+  end
+
+  def set_user_groups
+    current_user.id
   end
 
   # Only allow a trusted parameter "white list" through.
   def group_params
-    params.require(:group).permit(:name, :description)
+    params.require(:group).permit(:name, :description, :user_id)
   end
 end
