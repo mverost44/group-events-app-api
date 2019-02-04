@@ -1,4 +1,4 @@
-<% project_name = 'group-events-app-api' %>
+<% project_name = 'group-events-app' %>
 
 default: &default
   adapter: postgresql
