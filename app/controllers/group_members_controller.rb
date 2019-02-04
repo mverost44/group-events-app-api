@@ -1,5 +1,5 @@
-class GroupMembersController < ApplicationController
-  before_action :set_group_member, only: [:show, :update, :destroy]
+class GroupMembersController < OpenReadController
+  before_action :set_group_member, only: [:update, :destroy]
 
   # GET /group_members
   def index
@@ -8,9 +8,10 @@ class GroupMembersController < ApplicationController
     render json: @group_members
   end
 
-  # GET /group_members/1
-  def show
-    render json: @group_member
+  # GET all groups a member is a part of
+  def show_members
+    groups = GroupMember.where("user_id = #{find_group_members}")
+    render json: groups.uniq
   end
 
   # POST /group_members
@@ -40,12 +41,16 @@ class GroupMembersController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_group_member
-      @group_member = GroupMember.find(params[:id])
-    end
+  def set_group_member
+    @group_member = GroupMember.find(params[:id])
+  end
+
+  def find_group_members
+    current_user.id
+  end
 
     # Only allow a trusted parameter "white list" through.
-    def group_member_params
-      params.require(:group_member).permit(:group_id, :user_id)
-    end
+  def group_member_params
+    params.require(:group_member).permit(:group_id, :user_id)
+  end
 end

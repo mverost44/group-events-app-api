@@ -1,16 +1,17 @@
-class AttendingMembersController < ApplicationController
-  before_action :set_attending_member, only: [:show, :update, :destroy]
+class AttendingMembersController < OpenReadController
+  before_action :set_attending_member, only: [:update, :destroy]
 
-  # GET /attending_members
+  # GET /attending_members from specific event
   def index
-    @attending_members = AttendingMember.all
+    attending_members = AttendingMember.where("event_id = #{params[:id]}")
 
-    render json: @attending_members
+    render json: attending_members.uniq
   end
 
-  # GET /attending_members/1
-  def show
-    render json: @attending_member
+  # GET all events a member is part of
+  def show_attending_members
+    attending_members = AttendingMember.where("user_id = #{current_user.id}")
+    render json: attending_members
   end
 
   # POST /attending_members
@@ -39,13 +40,14 @@ class AttendingMembersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_attending_member
-      @attending_member = AttendingMember.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def attending_member_params
-      params.require(:attending_member).permit(:event_id, :user_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_attending_member
+    @attending_member = AttendingMember.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def attending_member_params
+    params.require(:attending_member).permit(:event_id, :user_id)
+  end
 end

@@ -1,3 +1,3 @@
 class AttendingMemberSerializer < ActiveModel::Serializer
-  attributes :id, :event, :user_id
+  attributes :id, :event, :user
 end

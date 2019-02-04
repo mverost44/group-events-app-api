@@ -5,7 +5,7 @@ class Group < ApplicationRecord
              inverse_of: 'organized_groups'
 
   has_many :group_members
-  has_many :users, through: :group_members
-  has_many :events
+  has_many :users, through: :group_members, dependent: :destroy
+  has_many :events, dependent: :destroy
   # validates :user, presence: true
 end

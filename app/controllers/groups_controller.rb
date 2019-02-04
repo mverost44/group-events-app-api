@@ -10,8 +10,14 @@ class GroupsController < OpenReadController
 
   # GET All groups organized by a user
   def show
-    groups = Group.where("user_id = #{set_user_groups}")
+    groups = Group.where("user_id = #{current_user.id}")
     render json: groups
+  end
+
+  def show_events
+    events = Group.find(params[:id]).events
+
+    render json: events
   end
 
   # POST /groups
@@ -46,10 +52,6 @@ class GroupsController < OpenReadController
   # Use callbacks to share common setup or constraints between actions.
   def set_group
     @group = current_user.organized_groups.find(params[:id])
-  end
-
-  def set_user_groups
-    current_user.id
   end
 
   # Only allow a trusted parameter "white list" through.
