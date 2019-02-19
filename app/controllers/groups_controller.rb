@@ -1,11 +1,11 @@
 class GroupsController < OpenReadController
   before_action :set_group, only: [:update, :destroy]
 
-  # GET /groups
+  # GET /groups that user isn't a part of or own
   def index
-    @groups = Group.all
+    groups = Group.where.not("user_id = #{current_user.id}")
 
-    render json: @groups
+    render json: groups
   end
 
   # GET All groups organized by a user
@@ -22,7 +22,7 @@ class GroupsController < OpenReadController
 
   # POST /groups
   def create
-    @group = current_user.groups.new(group_params)
+    @group = Group.new(group_params)
 
     if @group.save
       render json: @group, status: :created, location: @group

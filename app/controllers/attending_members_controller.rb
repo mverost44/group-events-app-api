@@ -16,7 +16,7 @@ class AttendingMembersController < OpenReadController
 
   # POST /attending_members
   def create
-    @attending_member = AttendingMember.new(attending_member_params)
+    @attending_member = current_user.attending_members.new(attending_member_params)
 
     if @attending_member.save
       render json: @attending_member, status: :created, location: @attending_member
@@ -43,7 +43,7 @@ class AttendingMembersController < OpenReadController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_attending_member
-    @attending_member = AttendingMember.find(params[:id])
+    @attending_member = current_user.attending_members.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.

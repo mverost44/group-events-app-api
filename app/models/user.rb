@@ -10,4 +10,7 @@ class User < ApplicationRecord
   has_many :groups, through: :group_members, dependent: :destroy
   has_many :attending_members
   has_many :events_to_attend, through: :attending_members, source: :event
+  has_many :organized_events,
+           class_name: 'Event',
+           inverse_of: 'event_organizer'
 end

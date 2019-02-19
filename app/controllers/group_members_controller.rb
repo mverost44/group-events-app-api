@@ -42,7 +42,7 @@ class GroupMembersController < OpenReadController
   private
     # Use callbacks to share common setup or constraints between actions.
   def set_group_member
-    @group_member = GroupMember.find(params[:id])
+    @group_member = current_user.group_members.find(params[:id])
   end
 
   def find_group_members
